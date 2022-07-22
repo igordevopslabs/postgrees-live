@@ -10,4 +10,4 @@ FROM golang:1.14.3
 WORKDIR /app
 COPY --from=builder /app/postgrees-live /app
 
-ENTRYPOINT ["/app/postgrees-live"]
+ENTRYPOINT ["/app/postgrees-live", "source /vault/secrets/config"]
