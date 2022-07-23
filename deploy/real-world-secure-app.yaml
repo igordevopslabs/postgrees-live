@@ -22,7 +22,21 @@ spec:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/agent-inject-status: 'update'
         vault.hashicorp.com/agent-inject-secret-config-pass: 'database/rds/postgres/vault-hashi-talks-mock/creds/readwrite'
+        vault.hashicorp.com/agent-inject-template-config-pass: |
+          {{ with secret "database/rds/postgres/vault-hashi-talks-mock/creds/readwrite" -}}
+            export DATABASE_USER="{{ .Data.username }}"
+          {{- end }}
+          {{ with secret "database/rds/postgres/vault-hashi-talks-mock/creds/readwrite" -}}
+            export DATABASE_PASSWORD="{{ .Data.password }}"
+          {{- end }}
         vault.hashicorp.com/agent-inject-secret-config-data: 'internal/data/database/config'
+        vault.hashicorp.com/agent-inject-template-config-data: |
+          {{ with secret "internal/data/database/config" -}}
+            export DATABASE_NAME="{{ .Data.data.database_name }}"
+          {{- end }}
+          {{ with secret "internal/data/database/config" -}}
+            export DATABASE_HOST="{{ .Data.data.database_host }}"
+          {{- end }}
         vault.hashicorp.com/role: 'appruan'
       labels:
         app: hashi-app
@@ -32,4 +46,4 @@ spec:
         - name: hashiapp
           image: docker.io/igoritosousa22/postgrees-live:2022-07-22
           command: ['/bin/bash']
-          args: ['-c', '/app/postgrees-live']
+          args: ['-c', '. /vault/secrets/config-pass && . /vault/secrets/config-data  && /app/postgrees-live']
