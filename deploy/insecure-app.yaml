@@ -1,12 +1,8 @@
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: hashi-app
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hashi-app
+  name: evil-hashi-app
+  namespace: vault-hashitalks
   labels:
     app: hashi-app
 spec:
@@ -16,26 +12,26 @@ spec:
   replicas: 1
   template:
     metadata:
-      annotations:
       labels:
         app: hashi-app
     spec:
-      serviceAccountName: app
+      serviceAccountName: vault-hashitalks
       containers:
-        - name: hashiapp
+        - name: evil-hashiapp
           image: docker.io/igoritosousa22/postgrees-live:2022-07-22
-          command: ["/bin/bash"]
-          args: ["-c", "/app/postgrees-live"]
+          command: ['/bin/bash']
+          args: ['-c', '/app/postgrees-live']
           envFrom:
             - configMapRef:
                 name: hashi-data
 ---
 apiVersion: v1
 data:
-  DATABASE_PASSWORD: ""
-  DATABASE_USER: ""
-  DATABASE_NAME: ""
-  DATABASE_HOST: ""
+  DATABASE_PASSWORD: "StrongPassword@2022"
+  DATABASE_USER: "administrador-manual"
+  DATABASE_NAME: "vault_hashi_talks_mock"
+  DATABASE_HOST: "vault-hashi-talks-mock-7e54ac90.cexop9zvz2f9.us-east-1.rds.amazonaws.com:5432"
 kind: ConfigMap
 metadata:
   name: hashi-data
+  namespace: vault-hashitalks
