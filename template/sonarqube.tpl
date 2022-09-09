@@ -32,8 +32,6 @@
         "filePath": "{{ $result.Target }}"
       }
     }
-
     {{- end -}}
   {{- end }}
-  ]
-}
+]}
