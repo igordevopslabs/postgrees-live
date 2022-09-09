@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: appruan
-  namespace: appruan
+  name: app-postgress
+  namespace: app-postgress
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hashi-app
-  namespace: appruan
+  namespace: app-postgress
   labels:
     app: hashi-app
 spec:
@@ -21,13 +21,13 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/agent-inject-status: 'update'
-        vault.hashicorp.com/agent-inject-secret-config-pass: 'database/rds/postgres/vault-hashi-talks-mock/creds/readwrite'
+        vault.hashicorp.com/agent-inject-secret-config-pass: 'database/rds/postgres/creds/readwrite'
         vault.hashicorp.com/agent-inject-secret-config-data: 'internal/data/database/config'
-        vault.hashicorp.com/role: 'appruan'
+        vault.hashicorp.com/role: 'app-postgress'
       labels:
         app: hashi-app
     spec:
-      serviceAccountName: appruan
+      serviceAccountName: app-postgress
       containers:
         - name: hashiapp
           image: docker.io/igoritosousa22/postgrees-live:2022-07-22
