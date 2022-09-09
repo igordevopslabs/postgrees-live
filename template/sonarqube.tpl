@@ -12,7 +12,7 @@
     {{- end }}
     {
       "engineId": "TRIVY",
-      "ruleId": "{{$vulnerabilityType}}",
+      "ruleId": "rule1",
       "severity": {{ if eq .Severity "UNKNOWN" -}}
                     "INFO"
                   {{- else if eq .Severity "LOW" -}}
