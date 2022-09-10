@@ -21,13 +21,13 @@ jobs:
     secrets: inherit
 
   security-fs:
-      uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-fs-scan.yml@main
-      secrets: inherit
+    uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-fs-scan.yml@main
+    secrets: inherit
 
-    security-iac:
-      uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-iac-scan.yml@main
-      secrets: inherit
+  security-iac:
+    uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-iac-scan.yml@main
+    secrets: inherit
 
-    container-scan:
-      uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-container-scan.yml@main
-      secrets: inherit
+  container-scan:
+    uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-container-scan.yml@main
+    secrets: inherit
