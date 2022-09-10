@@ -1,31 +1,33 @@
-name: Security Validation
+name: Security
 
 on:
   pull_request:
     branches:
       - main
-      - master
+
+concurrency:
+  group: security-checks-${{ github.head_ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
-  pull-requests: read
+  pull-requests: write
 
 jobs:
-  secret-scanning:
-    uses: igordevopslabs/custom-workflows-actions/.github/workflows/gitleaks-scan.yml@main
+  sonnar-scan:
+    uses: igordevopslabs/custom-workflows-actions/.github/workflows/code-quality.yml@main
+    with:
+      sonnar_project_key: igordevopslabs_postgrees-live
     secrets: inherit
 
   security-fs:
-    needs: [secret-scanning]
     uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-fs-scan.yml@main
-    with:
-      application_name: evil-go-app
-      skipp_file: gitleaks-report.sarif
     secrets: inherit
 
   security-iac:
-    needs: [secret-scanning, security-fs]
     uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-iac-scan.yml@main
-    with:
-      application_name: evil-go-app
+    secrets: inherit
+
+  container-scan:
+    uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-container-scan.yml@main
     secrets: inherit

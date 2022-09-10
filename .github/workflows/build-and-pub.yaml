@@ -11,23 +11,16 @@ env:
   REPO_NAME: ${{secrets.REPO_NAME}}
 
 jobs:
-  security-iac:
-    uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-iac-scan.yml@main
-    with:
-      application_name: postgrees-live
+  sonnar-scan:
+    uses: igordevopslabs/custom-workflows-actions/.github/workflows/code-quality.yml@main
     secrets: inherit
 
-  security:
+  container-scan:
     uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-container-scan.yml@main
-    with:
-      working_directory: "./"
-      image_name: postgrees-live
-      dockerfile_path: Dockerfile
-      tag: main
     secrets: inherit
 
   push-image-to-docker-hub:
-    needs: [security-iac, security]
+    needs: [sonnar-scan, container-scan]
     name: Build Docker Image
     runs-on: ubuntu-latest
     steps:
