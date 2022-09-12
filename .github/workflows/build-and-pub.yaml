@@ -13,6 +13,8 @@ env:
 jobs:
   sonnar-scan:
     uses: igordevopslabs/custom-workflows-actions/.github/workflows/code-quality.yml@main
+    with:
+      sonnar_project_key: igordevopslabs_postgrees-live
     secrets: inherit
 
   container-scan:
