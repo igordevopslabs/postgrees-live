@@ -70,6 +70,7 @@ func main() {
 	}
 }
 
+//Db conf for query
 func Querying(d DatabaseWrapper, query string) {
 	queryResp, err := d.pool.Query(context.Background(), query)
 	if err != nil {
